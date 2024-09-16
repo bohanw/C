@@ -86,14 +86,14 @@ public:
 
 //Following is representation of image 2D vector. May not actually represent the most efficient
 // image represnetation but for practicie purpose
-static int getPixelWithPaddingFromInput(int x, int y, int w, int h, const std::vector<std::vector<int> >& input) {
+ int getPixelWithPaddingFromInput(int x, int y, int w, int h, const std::vector<std::vector<int> >& input) {
     if (x < 0 || x >= w || y < 0 || y >= h) {
         return 0;  // Return 0 for padding areas
     }
     return input[y][x];
 }
 
-static void convolutionWithStride(const std::vector<std::vector<int> >& input,
+ void convolutionWithStride(const std::vector<std::vector<int> >& input,
                             const std::vector<std::vector<int> >& kernel,
                             std::vector<std::vector<int> >& output,
                             int stride)

@@ -21,25 +21,25 @@ public:
         delete[] buffer;
     }
 
-    typedef struct {
+    struct ImageHistogram{
         uint32_t R[2];
         uint32_t G[2];
         uint32_t B[2];
-    } ImageHistogram;
+    } ;
 
-    void initHistogram(ImageHistogram *hist) {
-        hist->R[0] = 0;
-        hist->R[1] = 0;
-        hist->G[0] = 0;
-        hist->G[1] = 0;
-        hist->B[0] = 0;
-        hist->B[1] = 0;
+    void initHistogram(ImageHistogram& hist) {
+        hist.R[0] = 0;
+        hist.R[1] = 0;
+        hist.G[0] = 0;
+        hist.G[1] = 0;
+        hist.B[0] = 0;
+        hist.B[1] = 0;
     }
 
-    void updateHistogram(ImageHistogram *hist, uint8_t r, uint8_t g, uint8_t b) {
-        hist->R[r > 127]++;  // If r > 127, index is 1, else 0
-        hist->G[g > 127]++;  // If g > 127, index is 1, else 0
-        hist->B[b > 127]++;  // If b > 127, index is 1, else 0
+    void updateHistogram(ImageHistogram& hist, uint8_t r, uint8_t g, uint8_t b) {
+        hist.R[r > 127]++;  // If r > 127, index is 1, else 0
+        hist.G[g > 127]++;  // If g > 127, index is 1, else 0
+        hist.B[b > 127]++;  // If b > 127, index is 1, else 0
     }
     // Method to set pixel at (x, y) to specific R, G, B, A values
     void setPixel(int x, int y, uint8_t R, uint8_t G, uint8_t B, uint8_t A) {
@@ -72,8 +72,7 @@ public:
     // Method to calculate the histogram of RGBA values
     void calculateHistogram()  {
         // Histograms for each channel
-        ImageHistogram* hist = (ImageHistogram*) malloc(sizeof(ImageHistogram));
-        initHistogram(hist);
+        ImageHistogram hist = {{0,0},{0,0},{0,0}};
         // Traverse the buffer to calculate histogram
         for (int i = 0; i < bufferLength; i += 4) {
             uint8_t R = static_cast<uint8_t>(buffer[i]);       // Get Red value
@@ -83,9 +82,9 @@ public:
             // Add pixel values to corresponding histogram
             updateHistogram(hist,R,G,B);//, uint8_t r, uint8_t g, uint8_t b)
         }
-        std::cout << "hist of R[0] "  << hist->R[0] << " r[1] " << hist->R[1] << "\n";
-        std::cout << "hist of G[0] "  << hist->G[0] << " g[1] " << hist->G[1] << "\n";
-        std::cout << "hist of B[0] "  << hist->B[0] << " b[1] " << hist->B[1] << "\n";
+        std::cout << "hist of R[0] "  << hist.R[0] << " r[1] " << hist.R[1] << "\n";
+        std::cout << "hist of G[0] "  << hist.G[0] << " g[1] " << hist.G[1] << "\n";
+        std::cout << "hist of B[0] "  << hist.B[0] << " b[1] " << hist.B[1] << "\n";
         
     }
 
@@ -93,7 +92,7 @@ public:
         int out_width = (width + factor - 1 ) / factor;
         int out_height = (height + factor - 1) / factor;
 
-        int block_size = factor * factor;
+
 
         for (int row = 0; row < out_height; row++){
             for(int col  = 0; col < out_width; col++){
@@ -151,7 +150,7 @@ public:
                 if(block_bottom + 1 > height){
                     block_bottom = height - 1;                
                 }
-                sum_r = sum_b = sum_g = 0;
+                sum_r = sum_b = sum_g = sum_a = 0;
                 count = 0; // cnt of pixels in each block size
                 for(row = block_top ;row <= block_bottom;row++){
                     for(col = block_left; col <= block_right;col++){
@@ -183,8 +182,6 @@ public:
     void maxpooling( int factor, uint8_t* output){
         int out_width = (width + factor - 1 ) / factor;
         int out_height = (height  + factor - 1)/ factor;
-
-        int block_size = factor * factor;
 
         for (int row = 0; row < out_height; row++){
             for(int col  = 0; col < out_width; col++){
