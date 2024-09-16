@@ -178,40 +178,50 @@ public:
             }
         } 
     }
-
     void maxpooling( int factor, uint8_t* output){
-        int out_width = (width + factor - 1 ) / factor;
-        int out_height = (height  + factor - 1)/ factor;
+      int out_width = (width + factor - 1 ) / factor;
+        int out_height = (height + factor - 1) / factor;
+        int count;
+        int block_size = factor * factor;
+        int block_width = factor;
+        int row, col, max_r, max_g, max_b,max_a;
 
-        for (int row = 0; row < out_height; row++){
-            for(int col  = 0; col < out_width; col++){
+        unsigned int block_left = 0, block_top = 0, block_right = 0, block_bottom = 0;
 
-                int max_r= 0,max_g = 0, max_b = 0, max_a = 0;
-
-                for (int block_row = 0; block_row < factor;block_row++){
-                    for(int block_col = 0; block_col < factor;block_col++){
-                        int orig_row = row * factor + block_row;
-                        int orig_col = col * factor + block_col;
-
-                        if(orig_col< width && orig_row < height){
-                            int buf_idx = (orig_row * width + orig_col ) * 4;
-                            max_r = std::max(max_r, static_cast<int>(buffer[buf_idx ]));
-                            max_g = std::max(max_g, static_cast<int>(buffer[buf_idx + 1]));
-                            max_b = std::max(max_b, static_cast<int>(buffer[buf_idx + 2]));
-
-                            max_a = std::max(max_a, static_cast<int>(buffer[buf_idx + 3]));
-
-                        }
+        for(block_left = 0; block_left < width;block_left += block_width){
+            block_right = block_left + block_width - 1;
+            if(block_right + 1 > width){
+                block_right = width - 1;
+            }
+            for(block_top = 0;block_top < height;block_top += block_width){
+                block_bottom = block_top + block_width - 1;
+                if(block_bottom + 1 > height){
+                    block_bottom = height - 1;                
+                }
+                max_r = max_g = max_b = max_a = 0;
+                for(row = block_top ;row <= block_bottom;row++){
+                    for(col = block_left; col <= block_right;col++){
+                        int buf_idx = (row * width + col) * 4;
+                        max_r = std::max(max_r, static_cast<int>(buffer[buf_idx]));
+                        max_g = std::max(max_g, static_cast<int>(buffer[buf_idx + 1]));
+                        max_b= std::max(max_b, static_cast<int>(buffer[buf_idx + 2]));
+                        max_a = std::max(max_a, static_cast<int>(buffer[buf_idx + 3]));
+  
                     }
                 }
-                int out_idx = (row * out_width + col) * 4;
+
+
+                int out_row = (block_top + factor - 1) / factor;
+                int out_col = (block_left  + factor - 1)/ factor;
+                int out_idx = (out_row * out_width + out_col) * 4;
                 output[out_idx] = max_r;
                 output[out_idx + 1] = max_g;
                 output[out_idx + 2] = max_b;
-                output[out_idx + 3] = max_a;
+                output[out_idx + 3] = max_a;               
             }
         }
     }
+
 };
 
 
