@@ -72,6 +72,10 @@ public:
         delete[] newBuffer;
     }
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 05fb171 (init)
 
     // Method to print the image
     void print() const {
@@ -162,6 +166,7 @@ int main() {
     std::cout << "\nConvolution with Zero-Padding:" << std::endl;
     img.print();
 
+<<<<<<< HEAD
     std::vector<std::vector<int> > input2d = 
     {
         {10, 20, 30, 40, 50},
@@ -190,3 +195,7 @@ int main() {
 }
 
 
+=======
+    return 0;
+}
+>>>>>>> 05fb171 (init)

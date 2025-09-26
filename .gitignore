@@ -1,2 +1,49 @@
+<<<<<<< HEAD
 *.gch
 a.out
+=======
+# ---- macOS system files ----
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# macOS Spotlight and Trash
+.Spotlight-V100
+.Trashes
+
+# ---- Compiled binaries ----
+*.o
+*.out
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+*.bin
+
+# ---- Temporary files ----
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.cache
+
+# ---- Python (if needed) ----
+*.pyc
+__pycache__/
+
+# ---- Other editors ----
+*.orig
+.vscode
+a.out.dSYM/
+
+# binary file
+air
+bst
+linkedlist
+memcpy
+oa
+select
+>>>>>>> 05fb171 (init)
